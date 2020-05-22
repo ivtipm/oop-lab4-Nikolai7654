@@ -1,0 +1,9 @@
+C:\Users\gukov\Desktop\Database\Database\bin\Release\Database.exe.config
+C:\Users\gukov\Desktop\Database\Database\bin\Release\Database.exe
+C:\Users\gukov\Desktop\Database\Database\bin\Release\Database.pdb
+C:\Users\gukov\Desktop\Database\Database\obj\Release\Database.Form1.resources
+C:\Users\gukov\Desktop\Database\Database\obj\Release\Database.Properties.Resources.resources
+C:\Users\gukov\Desktop\Database\Database\obj\Release\Database.csproj.GenerateResource.cache
+C:\Users\gukov\Desktop\Database\Database\obj\Release\Database.exe
+C:\Users\gukov\Desktop\Database\Database\obj\Release\Database.pdb
+C:\Users\gukov\Desktop\Database\Database\obj\Release\Database.csprojAssemblyReference.cache
