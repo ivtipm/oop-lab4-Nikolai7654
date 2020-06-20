@@ -62,12 +62,12 @@ namespace Database
         /// <summary>
         /// Изменить значение элемента
         /// </summary>
-        public void ChangeValue(ushort value, int index)
+        public void ChangeValue(ushort volume, int index)
         {
             Item it = (Item)itemList[index];
-            if (value < 0)
+            if (volume < 0)
                 throw new Exception("value >= 0 ");
-            it.Value = (ushort)value;
+            it.Volume = (ushort)volume;
         }
 
         /// <summary>
@@ -84,58 +84,18 @@ namespace Database
         /// <summary>
         /// Изменить статус элемента
         /// </summary>
-        public void ChangeStatus(ushort status, int index)
+        /// 
+      
+            /* public void ChangeStatus(ushort status, int index)
         {
             Item it = (Item)itemList[index];
             if ((status < 0)||(status > 3))
                 throw new Exception("(status >= 0)or(status <=3)");
             it.Status = status;
         }
+        */
 
-        /// <summary>
-        /// Изменить прочность элемента
-        /// </summary>
-        public void ChangeDurability(ushort durability, int index)
-        {
-            Item it = (Item)itemList[index];
-            if ((durability < 0)||(durability >100))
-                throw new Exception("(durability >= 0)or(durability <= 100) ");
-            it.Durability = durability;
-        }
-
-        /// <summary>
-        /// Изменить spell элемента
-        /// </summary>
-        public void ChangeSpell(ushort spell, int index)
-        {
-            Item it = (Item)itemList[index];
-            if (spell < 0)
-                throw new Exception("spell >= 0");
-            it.Spell = spell;
-        }
-
-        /// <summary>
-        /// Изменить шанс элемента
-        /// </summary>
-        public void ChangeChance(ushort chance, int index)
-        {
-            Item it = (Item)itemList[index];
-            if ((chance < 0) || (chance > 100))
-                throw new Exception("(chance >= 0)or(chance <= 100) ");
-            it.Chance = chance;
-        }
-
-        /// <summary>
-        /// Изменить level элемента
-        /// </summary>
-        public void ChangeLevel(ushort level, int index)
-        {
-            Item it = (Item)itemList[index];
-            if (level < 1)
-                throw new Exception("level >= 1");
-            it.Level = level;
-        }
-
+     
         /// <summary>
         /// Сохранение коллекции в файл
         /// </summary>
@@ -169,16 +129,15 @@ namespace Database
 
                     ushort id = (ushort)Convert.ToInt32(dataFromFile[0]);
                     string name = dataFromFile[1];
-                    ushort chance = (ushort)Convert.ToInt32(dataFromFile[2]);
-                    ushort value = (ushort)Convert.ToInt32(dataFromFile[3]);
+                  
+                    ushort volume = (ushort)Convert.ToInt32(dataFromFile[3]);
                     ushort type = (ushort)Convert.ToInt32(dataFromFile[4]);
-                    ushort level = (ushort)Convert.ToInt32(dataFromFile[5]);
-                    ushort durability = (ushort)Convert.ToInt32(dataFromFile[6]);
+                   
                     ushort cost = (ushort)Convert.ToInt32(dataFromFile[7]);
-                    ushort spell = (ushort)Convert.ToInt32(dataFromFile[8]);
-                    ushort status = (ushort)Convert.ToInt32(dataFromFile[9]);
+                   
+                    //ushort status = (ushort)Convert.ToInt32(dataFromFile[9]);
 
-                    Item item = new Item(id, name, cost, value, type, status, durability, spell, chance, level);
+                    Item item = new Item(id, name, cost, volume, type);
                     AddItem(item);
                 }
             }
@@ -230,18 +189,14 @@ namespace Database
                 case 1:
                     itemList.Sort(new TypeComparer(direction));
                     break;
+              
                 case 2:
-                    itemList.Sort(new LevelComparer(direction));
-                    break;
-                case 3:
                     itemList.Sort(new ValueComparer(direction));
                     break;
-                case 4:
+               /* case 3:
                     itemList.Sort(new StatusComparer(direction));
-                    break;
-                case 5:
-                    itemList.Sort(new SpellComparer(direction));
-                    break;
+                    break;*/
+               
             }
             
         }
@@ -253,27 +208,7 @@ namespace Database
         Descending
     }
 
-    public class LevelComparer : IComparer
-    {
-        private SortDirection m_direction = SortDirection.Ascending;
-
-        public LevelComparer() : base() { }
-
-        public LevelComparer(SortDirection direction)
-        {
-            this.m_direction = direction;
-        }
-
-        int IComparer.Compare(object x, object y)
-        {
-            Item item1 = (Item)x;
-            Item item2 = (Item)y;
-
-            return (this.m_direction == SortDirection.Ascending) ?
-                item1.Level.CompareTo(item2.Level) :
-                item2.Level.CompareTo(item1.Level);
-        }
-    }
+  
 
     public class TypeComparer : IComparer
     {
@@ -336,33 +271,13 @@ namespace Database
             Item item2 = (Item)y;
 
             return (this.m_direction == SortDirection.Ascending) ?
-                item1.Value.CompareTo(item2.Value) :
-                item2.Value.CompareTo(item1.Value);
+                item1.Volume.CompareTo(item2.Volume) :
+                item2.Volume.CompareTo(item1.Volume);
         }
     }
-    public class SpellComparer : IComparer
-    {
-        private SortDirection m_direction = SortDirection.Ascending;
+   
 
-        public SpellComparer() : base() { }
-
-        public SpellComparer(SortDirection direction)
-        {
-            this.m_direction = direction;
-        }
-
-        int IComparer.Compare(object x, object y)
-        {
-            Item item1 = (Item)x;
-            Item item2 = (Item)y;
-
-            return (this.m_direction == SortDirection.Ascending) ?
-                item1.Spell.CompareTo(item2.Spell) :
-                item2.Spell.CompareTo(item1.Spell);
-        }
-    }
-
-    public class StatusComparer : IComparer
+  /*  public class StatusComparer : IComparer
     {
         private SortDirection m_direction = SortDirection.Ascending;
 
@@ -382,6 +297,6 @@ namespace Database
                 item1.Status.CompareTo(item2.Status) :
                 item2.Status.CompareTo(item1.Status);
         }
-    }
+    }*/
 
 }

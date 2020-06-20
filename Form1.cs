@@ -21,45 +21,20 @@ namespace Database
         public Form1()
         {
             InitializeComponent();
-            InitializeTimers();
+          
             comboBoxSort.Text = comboBoxSort.Items[0].ToString();
-            comboBoxDirection.Text = comboBoxDirection.Items[0].ToString();
         }
 
-        private void InitializeTimers()
-        {
-            // Таймер для автосохранения данных в файл раз в 1 минуту
-            timerSave.Interval = 60000;
-            timerSave.Tick += new EventHandler(timer1_Tick);
-
-            // Таймер для отображения надписи, свидетельствующей о сохранении файла
-            // длительностью 3 сек
-            timerLabel.Interval = 3000;
-            timerLabel.Tick += new EventHandler(timer2_Tick);
-        }
+      
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             data.SaveToFile(filename);
-            labelAutoSave.Visible = true;
             timerSave.Enabled = true;
             timerLabel.Start();
         }
 
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-            if (labelAutoSave.Visible)
-            {
-                labelAutoSave.Visible = false;
-            }
-            else
-            {
-                labelAutoSave.Visible = false;
-            }
-            timerLabel.Enabled = false;
-            timerLabel.Stop();
-        }
-
+       
         public ushort generateID()
         {
             ushort max = 0;
@@ -81,28 +56,20 @@ namespace Database
             {
                 string name = textName.Text;
                 int cost = Convert.ToInt32(textCost.Text);
-                ushort value = (ushort)Convert.ToUInt32(textValue.Text);
+                ushort volume = (ushort)Convert.ToUInt32(textVolume.Text);
                 ushort type = (ushort)Convert.ToUInt32(textType.Text);
-                ushort status = (ushort)Convert.ToUInt32(textStatus.Text);
-                ushort level = (ushort)Convert.ToUInt32(textLevel.Text);
-                ushort durability = (ushort)Convert.ToUInt32(textDurability.Text);
-                ushort chance = (ushort)Convert.ToUInt32(textChance.Text);
-                ushort Spell = (ushort)Convert.ToUInt32(textSpell.Text);
+                
                 textName.Text = "";
                 textCost.Text = "";
-                textValue.Text = "";
-                textStatus.Text = "";
+                textVolume.Text="";
                 textType.Text = "";
-                textLevel.Text = "";
-                textDurability.Text = "";
-                textSpell.Text = "";
-                textChance.Text = "";
+                
 
-                Item item = new Item(generateID(), name, cost, value, type, status, durability, Spell, chance, level);
+                Item item = new Item(generateID(), name, cost, volume, type);
                 data.AddItem(item);
                 int n = data.ItemList.Count;
 
-                table.Rows.Add(item.ItemID, name, chance, value, type, level,  durability, cost, Spell, status);
+                table.Rows.Add(item.ItemID, name,  volume, type,  cost);
                 int count = table.Rows.Count - 2;
 
                 if ((!timerSave.Enabled) && (filename != ""))
@@ -111,7 +78,7 @@ namespace Database
                     timerSave.Start();
                 }
 
-                switch (status)
+              /*  switch (status)
                 {
                     case 1:
                         table.Rows[count].Cells[9].Style.BackColor = Color.Gold;
@@ -122,7 +89,7 @@ namespace Database
                     case 3:
                         table.Rows[count].Cells[9].Style.BackColor = Color.Gray;
                         break;
-                }
+                }*/
 
             }
             catch (Exception exception)
@@ -201,18 +168,8 @@ namespace Database
                 case 1:
                     data.ChangeName((string)value, indRow);
                     break;
+             
                 case 2:
-                    try
-                    {
-                        data.ChangeChance((ushort)Convert.ToUInt32(value), indRow);
-                    }
-                    catch (Exception exception)
-                    {
-                        MessageBox.Show($"Ошибка: {exception.Message}");
-                        table.Rows[indRow].Cells[indColumn].Value = oldValue;
-                    }
-                    break;
-                case 3:
                     try
                     {
                         data.ChangeValue((ushort)Convert.ToUInt32(value), indRow);
@@ -223,7 +180,7 @@ namespace Database
                         table.Rows[indRow].Cells[indColumn].Value = oldValue;
                     }
                     break;
-                case 4:
+                case 3:
                     try
                     {
                         data.ChangeType((ushort)Convert.ToUInt32(value), indRow);
@@ -234,29 +191,8 @@ namespace Database
                         table.Rows[indRow].Cells[indColumn].Value = oldValue;
                     }
                     break;
-                case 5:
-                    try
-                    {
-                        data.ChangeLevel((ushort)Convert.ToUInt32(value), indRow);
-                    }
-                    catch (Exception exception)
-                    {
-                        MessageBox.Show($"Ошибка: {exception.Message}");
-                        table.Rows[indRow].Cells[indColumn].Value = oldValue;
-                    }
-                    break;
-                case 6:
-                    try
-                    {
-                        data.ChangeDurability((ushort)Convert.ToInt32(value), indRow);
-                    }
-                    catch (Exception exception)
-                    {
-                        MessageBox.Show($"Ошибка: {exception.Message}");
-                        table.Rows[indRow].Cells[indColumn].Value = oldValue;
-                    }
-                    break;
-                case 7:
+             
+                case 4:
                     try
                     {
                         data.ChangeCost(Convert.ToInt32(value), indRow);
@@ -267,18 +203,8 @@ namespace Database
                         table.Rows[indRow].Cells[indColumn].Value = oldValue;
                     }
                     break;
-                case 8:
-                    try
-                    {
-                        data.ChangeSpell((ushort)Convert.ToUInt32(value), indRow);
-                    }
-                    catch (Exception exception)
-                    {
-                        MessageBox.Show($"Ошибка: {exception.Message}");
-                        table.Rows[indRow].Cells[indColumn].Value = oldValue;
-                    }
-                    break;
-                case 9:
+                
+               /* case 9:
                     try
                     {
                         data.ChangeStatus((ushort)Convert.ToInt32(value), indRow);
@@ -300,7 +226,7 @@ namespace Database
                         MessageBox.Show($"Ошибка: {exception.Message}");
                         table.Rows[indRow].Cells[indColumn].Value = oldValue;
                     }
-                    break;
+                    break;*/
             }
         }
 
@@ -321,7 +247,7 @@ namespace Database
                 timerSave.Start();
             }
             // При каждом сохранении будет появляться надпись "Сохранение..."
-            labelAutoSave.Visible = true;
+           
             timerLabel.Enabled = true;
             timerLabel.Start();
             data.SaveToFile(filename);
@@ -332,8 +258,8 @@ namespace Database
             for (int i = 0; i < data.ItemList.Count; i++)
             {
                 Item item = (Item)data.ItemList[i];
-                table.Rows.Add(item.ItemID, item.Name, item.Chance, item.Value, item.Type, item.Level, item.Durability, item.Cost, item.Spell, item.Status);
-                switch (item.Status)
+                table.Rows.Add(item.ItemID, item.Name, item.Volume, item.Type,  item.Cost );
+               /* switch (item.Status)
                 {
                     case 1:
                         table.Rows[i].Cells[9].Style.BackColor = Color.Gold;
@@ -344,7 +270,7 @@ namespace Database
                     case 3:
                         table.Rows[i].Cells[9].Style.BackColor = Color.Gray;
                         break;
-                }
+                }*/
             }
             // последнюю строку запрещаем редактировать
             table.Rows[data.ItemList.Count].ReadOnly = true;
@@ -361,7 +287,7 @@ namespace Database
             WriteToDataGrid();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+       /* private void button1_Click(object sender, EventArgs e)
         {
             table.Rows.Clear();
             if (comboBoxDirection.SelectedIndex == 0)
@@ -369,7 +295,7 @@ namespace Database
             else
                 data.Sort(SortDirection.Descending, comboBoxSort.SelectedIndex);
             WriteToDataGrid();
-        }
+        }*/
 
         private void aboutTheProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -400,5 +326,7 @@ namespace Database
                 }
             }
         }
+
+      
     }
 }
